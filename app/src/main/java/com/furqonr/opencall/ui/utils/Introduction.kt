@@ -11,6 +11,10 @@ object Introduction {
         override val arguments: List<NamedNavArgument> = emptyList()
         override val destination: String = "detail"
     }
+    val signin = object : NavigationCommand {
+        override val arguments: List<NamedNavArgument> = emptyList()
+        override val destination: String = "signin"
+    }
 }
 
 interface NavigationCommand {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1033127348229",
+    "project_id": "open-call-id",
+    "storage_bucket": "open-call-id.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033127348229:android:f32f84ebe180786082346c",
+        "android_client_info": {
+          "package_name": "com.furqonr.opencall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033127348229-psm0nda2v72dr4gj66bfdondhmmlq4ge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu9NBpGl9w4H5dyC44D6h6YbDmgIOVuPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033127348229-psm0nda2v72dr4gj66bfdondhmmlq4ge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

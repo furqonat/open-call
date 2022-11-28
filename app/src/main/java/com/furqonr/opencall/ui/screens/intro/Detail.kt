@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.furqonr.opencall.R
@@ -18,7 +19,9 @@ import com.furqonr.opencall.ui.theme.Green700
 import com.furqonr.opencall.ui.theme.Typography
 
 @Composable
-fun Detail() {
+fun Detail(
+    onButtonClick: () -> Unit = {}
+) {
 
     val configuration = LocalConfiguration.current
     val height = configuration.screenHeightDp.dp
@@ -42,9 +45,13 @@ fun Detail() {
                 contentDescription = "Detail asset",
                 modifier = Modifier.height(height / 2)
             )
-            Text(text = "Did you know?", style = Typography.h6, color = Color.White)
             Text(
-                text = "This application is made by a solo developer and primarily made for learning purposes",
+                text = stringResource(id = R.string.info),
+                style = Typography.h6,
+                color = Color.White
+            )
+            Text(
+                text = stringResource(id = R.string.info_sub),
                 style = Typography.body1,
                 color = Color.White,
                 textAlign = TextAlign.Center
@@ -59,9 +66,9 @@ fun Detail() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
-                onClick = {  }
+                onClick = { onButtonClick() }
             ) {
-                Text(text = "Get Started")
+                Text(text = "Take me in")
             }
         }
     }

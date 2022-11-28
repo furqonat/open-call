@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Open Call</string>
+    <string name="app_name" translatable="false">Open Call</string>
+
+    <string name="welcome">Welcome to OpenCall</string>
+    <string name="welcome_subtitle">A simple app to make a call without any personal information needed</string>
+
+    <string name="info">Did you know?</string>
+    <string name="info_sub">This application is made by solo programmer and primarily made for learning proposes</string>
+
+    <string name="google_web_client_id" translatable="false">1033127348229-psm0nda2v72dr4gj66bfdondhmmlq4ge.apps.googleusercontent.com</string>
 </resources>

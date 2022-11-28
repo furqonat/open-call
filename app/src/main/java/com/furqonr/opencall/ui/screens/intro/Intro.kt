@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.furqonr.opencall.R
@@ -18,7 +19,7 @@ import com.furqonr.opencall.ui.theme.Green700
 import com.furqonr.opencall.ui.theme.Typography
 
 @Composable
-fun Welcome(
+fun Intro(
     onNextClick: () -> Unit
 ) {
 
@@ -47,12 +48,12 @@ fun Welcome(
                     .height(height / 2)
             )
             Text(
-                text = "Welcome to OpenCall",
+                text = stringResource(id = R.string.welcome),
                 style = Typography.h6,
                 color = Color.White
             )
             Text(
-                text = "A simple app to make a call without any personal information needed",
+                text = stringResource(id = R.string.welcome_subtitle),
                 style = Typography.body1,
                 color = Color.White,
                 textAlign = TextAlign.Center
@@ -68,7 +69,7 @@ fun Welcome(
             Button(
                 onClick = { onNextClick() }
             ) {
-                Text(text = "Next")
+                Text(text = "Get Started")
             }
         }
     }

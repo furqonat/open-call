@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome">Selamat datang di OpenCall</string>
+    <string name="welcome_subtitle">Aplikasi sederhana untuk melakukan panggilan tanpa informasi pribadi</string>
+
+    <string name="info">Apakah kamu tau?</string>
+    <string name="info_sub">Aplikasi ini di buat oleh solo programer dan fokuskan untuk pembelajaran</string>
+
+</resources>
