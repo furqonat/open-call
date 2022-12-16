@@ -1,20 +1,25 @@
 package com.furqonr.opencall
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainViewModel : ViewModel() {
 
     private val _auth = Firebase.auth
+    private val _firestore = Firebase.firestore
 
     var currentUser: MutableState<Boolean> = mutableStateOf(_auth.currentUser != null)
+    var loadingCreateNewUser: MutableState<Boolean> = mutableStateOf(false)
 
     fun signIn(username: String, currentUser: (FirebaseUser?) -> Unit) {
+        loadingCreateNewUser.value = true
         _auth.signInAnonymously().addOnCompleteListener { authResultTask ->
             if (authResultTask.isSuccessful) {
                 val changeRequest = userProfileChangeRequest {
@@ -23,15 +28,37 @@ class MainViewModel : ViewModel() {
                 _auth.currentUser?.updateProfile(changeRequest)
                     ?.addOnCompleteListener {
                         if (it.isSuccessful) {
-                            this.currentUser.value = true
-                            currentUser(_auth.currentUser)
+                            createNewUser(_auth.currentUser) {
+                                this.currentUser.value = true
+                                currentUser(_auth.currentUser)
+                            }
                         }
                     }
-
-            } else {
-                throw Exception("Sign in failed")
             }
+        }.addOnFailureListener {
+            loadingCreateNewUser.value = false
+            Log.e("MainViewModel", "signIn: ${it.message}")
         }
+    }
+
+    private fun createNewUser(user: FirebaseUser?, currentUser: (FirebaseUser?) -> Unit) {
+        val account = hashMapOf(
+            "username" to user?.displayName,
+            "uid" to user?.uid,
+            "status" to "online",
+            "allowStranger" to false,
+
+            )
+        user?.uid?.let { _firestore.collection("users").document(it).set(account) }
+            ?.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    currentUser(user)
+                    loadingCreateNewUser.value = false
+                } else {
+                    loadingCreateNewUser.value = false
+                    throw Exception("Create new user failed")
+                }
+            }
     }
 
     val getUser: String? = _auth.currentUser?.displayName

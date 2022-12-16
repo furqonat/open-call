@@ -1,41 +1,62 @@
 package com.furqonr.opencall.ui.screens.dashboard
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.furqonr.opencall.MainViewModel
-import com.furqonr.opencall.ui.components.appbar.AppBar
+import androidx.navigation.NavController
+import com.furqonr.opencall.models.User
+import com.furqonr.opencall.ui.components.dashboard.DashboardAppBar
+import com.furqonr.opencall.ui.components.dashboard.PublicUser
+import com.furqonr.opencall.ui.theme.Typography
+
 
 @Composable
 fun Dashboard(
-    onBackPress: () -> Unit = {}
+    navController: NavController
 ) {
-    val viewModel: MainViewModel = viewModel()
+    val viewModel: DashboardViewModel = viewModel()
+    val (users, setUsers) = remember {
+        mutableStateOf(listOf<User?>(null))
+    }
 
     Scaffold(
         topBar = {
-            AppBar(
-                title = "Dashboard"
-            )
+            DashboardAppBar(onSearch = {}, addIconClick = {
+
+            })
         }
-    ) {
-        Column(
-            modifier = Modifier.padding(it)
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues)
         ) {
-            Text(text = "Dashboard")
-            Button(onClick = {
-                viewModel.signOut()
-//                onBackPress()
-            }) {
-                Text(text = "Logout")
+            item(0) {
+                Text(text = "Public user", modifier = Modifier.padding(4.dp), style = Typography.h6)
+            }
+            items(
+                items = users,
+                key = { it?.uid ?: "" }
+            ) { item ->
+                if (item != null) {
+                    PublicUser(user = item, navController = navController, viewModel)
+                }
+            }
+            item(1) {
+                Text(text = "My Chats", modifier = Modifier.padding(4.dp), style = Typography.h6)
             }
         }
+
     }
-    BackHandler(enabled = true, onBack = onBackPress)
+
+    LaunchedEffect(users.size) {
+        viewModel.getUsers {
+
+            setUsers(it.take(5))
+        }
+    }
+
 }
