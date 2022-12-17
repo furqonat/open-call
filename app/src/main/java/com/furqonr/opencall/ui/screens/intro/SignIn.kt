@@ -15,14 +15,16 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.furqonr.opencall.ui.components.intro.SignInWithGoogleButton
 import com.furqonr.opencall.ui.theme.Green700
+import com.furqonr.opencall.ui.theme.Typography
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Brands
 import compose.icons.fontawesomeicons.brands.Facebook
 
 @Composable
-fun Signin(
+fun SignIn(
     onSignInClick: (username: String?) -> Unit = {},
     onGoogleClick: () -> Unit = {},
+    disabled: Boolean = false
 ) {
     val configuration = LocalConfiguration.current
     val displayHeight = configuration.screenHeightDp
@@ -72,12 +74,19 @@ fun Signin(
                     }
                 )
 
-                Button(onClick = {
-                    if (username.isNotBlank()) {
-                        onSignInClick(username)
+                Button(
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = !disabled && username.trim().isNotEmpty(),
+                    onClick = {
+                        if (username.isNotBlank()) {
+                            onSignInClick(username)
+                        }
+                    }) {
+                    if (disabled) {
+                        CircularProgressIndicator()
+                    } else {
+                        Text(text = "Sign In", style = Typography.button)
                     }
-                }) {
-                    Text(text = "Sign in")
                 }
                 Row(
                     modifier = Modifier
