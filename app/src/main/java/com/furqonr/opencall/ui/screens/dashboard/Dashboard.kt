@@ -3,18 +3,20 @@ package com.furqonr.opencall.ui.screens.dashboard
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.furqonr.opencall.models.User
-import com.furqonr.opencall.ui.components.dashboard.DashboardAppBar
 import com.furqonr.opencall.ui.components.dashboard.PublicUser
 import com.furqonr.opencall.ui.theme.Typography
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Dashboard(
     navController: NavController
@@ -24,13 +26,7 @@ fun Dashboard(
         mutableStateOf(listOf<User?>(null))
     }
 
-    Scaffold(
-        topBar = {
-            DashboardAppBar(onSearch = {}, addIconClick = {
-
-            })
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
@@ -54,7 +50,6 @@ fun Dashboard(
 
     LaunchedEffect(users.size) {
         viewModel.getUsers {
-
             setUsers(it.take(5))
         }
     }

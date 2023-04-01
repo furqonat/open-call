@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.furqonr.opencall.ui.Navigation
-import com.furqonr.opencall.ui.theme.OpenCallTheme
+import com.furqonr.opencall.ui.theme.AppTheme
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            OpenCallTheme {
+            AppTheme {
                 Navigation()
             }
         }

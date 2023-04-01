@@ -29,6 +29,14 @@ private val randomColor = listOf(
     Color.Black,
 )
 
+class RandomColor {
+    companion object {
+        fun getColor(): Color {
+            return randomColor[Random().nextInt(randomColor.size)]
+        }
+    }
+}
+
 @Composable
 fun PublicUser(
     user: User,
@@ -48,7 +56,7 @@ fun PublicUser(
             .padding(4.dp)
     ) {
         Surface(
-            color = randomColor[Random().nextInt(randomColor.size)],
+            color = RandomColor.getColor(),
             modifier = Modifier
                 .padding(4.dp)
                 .size(50.dp),
@@ -67,6 +75,9 @@ fun PublicUser(
                 .clickable {
                     if (chatId.value.isNotEmpty()) {
                         navController.navigate("chat/${chatId.value}")
+                    } else {
+//                        navController.navigate("c")
+                        Log.e("ERROR", chatId.value)
                     }
                 }
         ) {

@@ -1,17 +1,14 @@
 package com.furqonr.opencall.ui.screens.chat
 
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.furqonr.opencall.models.ChatModel
@@ -22,6 +19,7 @@ import com.furqonr.opencall.ui.components.chat.Message
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Chat(
     navController: NavController,
@@ -41,25 +39,24 @@ fun Chat(
         mutableStateOf("")
     }
 
-    val (otherUserUid, setOtherUserUid) = remember {
-        mutableStateOf("")
-    }
 
     val (chats, setChats) = remember {
         mutableStateOf<List<ChatModel>>(mutableListOf())
     }
 
-    val lazyColumnState = rememberLazyListState()
 
     val scope = rememberCoroutineScope()
 
+    val scrollState = rememberScrollState()
+
+    val focusRequester = remember { FocusRequester() }
 
 
     Scaffold(
         topBar = {
             ChatTopBar(
                 navController = navController,
-                user = user
+                user = user,
             )
         },
         bottomBar = {
@@ -73,11 +70,7 @@ fun Chat(
                     ) {
                         setChats(chats + it)
                         scope.launch {
-                            lazyColumnState.scroll {
-                                scrollBy(
-                                    pixels = Float.MAX_VALUE,
-                                )
-                            }
+                            scrollState.animateScrollTo(0)
                         }
                     }
 
@@ -85,23 +78,28 @@ fun Chat(
             )
         }
     ) { paddingValues ->
-        LazyColumn(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(paddingValues),
-            reverseLayout = true,
-            state = lazyColumnState,
+                .padding(paddingValues)
+                .verticalScroll(
+                    state = scrollState,
+                    enabled = true,
+                    reverseScrolling = true,
+                    flingBehavior = null
+                )
         ) {
-            item {
-                Text(text = "", modifier = Modifier.padding(0.dp), fontSize = 0.sp)
-            }
-            items(chats) { chat ->
+            chats.mapIndexed { index, chat ->
+                val lastChat = chats[chats.size - 1].sender.uid
+                val currentChat = chats[index].sender.uid
+                val nextChat = if (index + 1 < chats.size) chats[index + 1].sender.uid else lastChat
+                val isSame = currentChat == nextChat
+
+                val same = chat.sender.compare(currentUserUid)
                 Message(
                     chatModel = chat,
                     videModel = model,
                     chatId = chatId,
-                    userId = currentUserUid
+                    isCurrentUser = isSame,
                 )
             }
         }
@@ -111,10 +109,8 @@ fun Chat(
         model.currentUser?.uid?.let { owner ->
             if (owner == userId) {
                 setCurrentUserUid(userId)
-                setOtherUserUid(senderId)
             } else {
                 setCurrentUserUid(senderId)
-                setOtherUserUid(userId)
             }
             model.getUser(uid = userId) {
                 setUser(it)

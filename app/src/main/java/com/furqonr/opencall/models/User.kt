@@ -5,4 +5,8 @@ data class User(
     val displayName: String,
     val status: String = "online",
     val allowStranger: Boolean = false,
-)
+) {
+    fun compare(other: String): Boolean {
+        return uid == other
+    }
+}

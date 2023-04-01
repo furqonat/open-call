@@ -4,26 +4,24 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.furqonr.opencall.MainActivity
 import com.furqonr.opencall.MainViewModel
 import com.furqonr.opencall.ui.screens.call.Call
 import com.furqonr.opencall.ui.screens.dashboard.Dashboard
-import com.furqonr.opencall.ui.screens.profile.Profile
 import com.furqonr.opencall.ui.screens.settings.Settings
 import com.furqonr.opencall.ui.theme.Green700
 import com.furqonr.opencall.ui.utils.BottomNavigationItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     userState: (Boolean) -> Unit = {},
@@ -48,24 +46,21 @@ fun MainScreen(
 
     Scaffold(
         bottomBar = {
-            BottomNavigation(
+            NavigationBar(
                 contentColor = Green700,
-                backgroundColor = MaterialTheme.colors.background,
-                elevation = 8.dp
             ) {
                 items.forEachIndexed { index, screen ->
-                    BottomNavigationItem(
+                    NavigationBarItem(
                         icon = {
                             Icon(
                                 painter = painterResource(id = if (index == indexScreen) screen.filledIcon else screen.icon),
                                 contentDescription = screen.label,
-                                modifier = Modifier.size(24.dp)
                             )
                         },
                         label = {
                             Text(text = screen.label)
                         },
-                        alwaysShowLabel = indexScreen == index,
+                        alwaysShowLabel = true,
                         selected = indexScreen == index,
                         onClick = {
                             if (indexScreen != index) {

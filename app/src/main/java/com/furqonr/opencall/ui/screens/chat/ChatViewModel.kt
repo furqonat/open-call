@@ -74,7 +74,7 @@ class ChatViewModel : ViewModel() {
                             )
                         }
                     }
-                    chats(chatModelList.sortedByDescending { it.timestamp })
+                    chats(chatModelList.sortedBy { it.timestamp })
                 }
             }
     }

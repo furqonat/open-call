@@ -94,6 +94,8 @@ class DashboardViewModel : ViewModel() {
                 val (first, second) = document.id.split("::")
                 if (first == currentUserUid && second == userUid || first == userUid && second == currentUserUid) {
                     chatId(document.id)
+                } else {
+                    chatId("${currentUserUid}::${userUid}")
                 }
             }
         }

@@ -2,9 +2,9 @@ package com.furqonr.opencall.ui.components.chat
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
@@ -28,17 +28,11 @@ fun Message(
     chatModel: ChatModel,
     videModel: ChatViewModel,
     chatId: String,
-    userId: String
+    isCurrentUser: Boolean
 ) {
     val chatStatus = remember {
         mutableStateOf(false)
     }
-
-    val (isCurrentUser, _) = remember {
-        mutableStateOf(chatModel.sender.uid == userId)
-    }
-
-    println(isCurrentUser)
 
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val width = min(screenWidth * 0.7f, 300f).dp
@@ -46,7 +40,7 @@ fun Message(
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = if (isCurrentUser) Arrangement.Start else Arrangement.End,
+            horizontalArrangement = if (!isCurrentUser) Arrangement.Start else Arrangement.End,
         ) {
             Row(
                 verticalAlignment = Alignment.Bottom,
@@ -56,15 +50,15 @@ fun Message(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Column(
-                    horizontalAlignment = Alignment.End
+                    horizontalAlignment = if (!isCurrentUser) Alignment.Start else Alignment.End,
                 ) {
                     Card(
                         modifier = Modifier.padding(8.dp),
                         shape = RoundedCornerShape(
                             topEnd = 8.dp,
                             topStart = 8.dp,
-                            bottomEnd = if (isCurrentUser) 8.dp else 0.dp,
-                            bottomStart = if (isCurrentUser) 0.dp else 8.dp
+                            bottomEnd = if (!isCurrentUser) 8.dp else 0.dp,
+                            bottomStart = if (!isCurrentUser) 0.dp else 8.dp
                         ),
                     ) {
                         Text(
@@ -104,6 +98,7 @@ fun Message(
     SideEffect {
         videModel.getMessageStatus(chatId = chatId, messageId = chatModel.uid) {
             chatStatus.value = it
+
         }
     }
 }
