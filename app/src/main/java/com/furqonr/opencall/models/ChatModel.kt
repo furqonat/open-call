@@ -3,7 +3,7 @@ package com.furqonr.opencall.models
 import com.google.gson.annotations.SerializedName
 
 
-data class ChatModel(
+class ChatModel(
     var uid: String,
     var message: String,
     var timestamp: Long,

@@ -1,5 +1,6 @@
 package com.furqonr.opencall.ui.components.chat
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -74,7 +75,9 @@ fun ChatTopBar(
                 user?.status?.let {
                     Text(
                         text = if (it == "online") it else {
-                            DateConverter(it).convert()
+//                            DateConverter(it).convert()
+                            println(it)
+                                                           ""
                         }, style = Typography.caption
                     )
                 }

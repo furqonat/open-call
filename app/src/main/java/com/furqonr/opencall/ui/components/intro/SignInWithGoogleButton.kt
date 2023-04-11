@@ -1,35 +1,37 @@
 package com.furqonr.opencall.ui.components.intro
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
+import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.furqonr.opencall.R
 import com.furqonr.opencall.services.rememberSignInWithGoogle
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import compose.icons.FontAwesomeIcons
-import compose.icons.fontawesomeicons.Brands
-import compose.icons.fontawesomeicons.brands.Google
+import com.google.firebase.auth.AuthResult
 
 @Composable
 fun SignInWithGoogleButton(
-    onSuccess: () -> Unit = {},
+    onSuccess: (AuthResult) -> Unit = {},
 ) {
-    val launcher = rememberSignInWithGoogle({
+    val launcher = rememberSignInWithGoogle(onSuccess ={
         Log.i("SignInWithGoogleButton", "onSuccess $it")
         if (it?.user != null) {
             Log.i("user", "onSuccess: ${it.user}")
-            onSuccess()
+            onSuccess(it)
         }
+    }, onError = {
+        Log.e("Error", "${it.status} ${it.message}")
     })
 
 
@@ -46,9 +48,10 @@ fun SignInWithGoogleButton(
                 launcher.launch(signInIntent)
             },
         shape = CircleShape,
+        backgroundColor = Color.White
     ) {
-        Icon(
-            imageVector = FontAwesomeIcons.Brands.Google,
+        Image(
+            painter = painterResource(id = R.drawable.google_logo),
             contentDescription = "Google icon",
             modifier = Modifier
                 .padding(8.dp)

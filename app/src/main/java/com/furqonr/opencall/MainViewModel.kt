@@ -41,24 +41,39 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun signInWithGoogle(user: FirebaseUser, currentUser: (FirebaseUser?) -> Unit) {
+        createNewUser(user, currentUser)
+    }
+
+
     private fun createNewUser(user: FirebaseUser?, currentUser: (FirebaseUser?) -> Unit) {
         val account = hashMapOf(
             "username" to user?.displayName,
             "uid" to user?.uid,
             "status" to "online",
             "allowStranger" to false,
-
-            )
-        user?.uid?.let { _firestore.collection("users").document(it).set(account) }
-            ?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    currentUser(user)
-                    loadingCreateNewUser.value = false
+            "avatar" to user?.photoUrl
+        )
+        _firestore.collection("users").document("${user?.uid}").get().addOnCompleteListener { fUser ->
+            if (fUser.isSuccessful) {
+                val id = fUser.result.data?.get("uid")
+                if (id != null) {
+                    return@addOnCompleteListener
                 } else {
-                    loadingCreateNewUser.value = false
-                    throw Exception("Create new user failed")
+                    user?.uid?.let { _firestore.collection("users").document(it).set(account) }
+                        ?.addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                currentUser(user)
+                                loadingCreateNewUser.value = false
+                            } else {
+                                loadingCreateNewUser.value = false
+                                throw Exception("Create new user failed")
+                            }
+                        }
                 }
             }
+        }
+
     }
 
     val getUser: String? = _auth.currentUser?.displayName

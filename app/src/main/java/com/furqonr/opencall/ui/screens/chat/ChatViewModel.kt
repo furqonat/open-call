@@ -1,6 +1,8 @@
 package com.furqonr.opencall.ui.screens.chat
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.furqonr.opencall.models.ChatModel
 import com.furqonr.opencall.models.User
@@ -19,6 +21,7 @@ class ChatViewModel : ViewModel() {
 
     val currentUser = _firebaseUser
 
+
     fun getUser(uid: String, user: (User) -> Unit) {
         _firestrore.collection("users").document(uid).get().addOnSuccessListener {
             user(
@@ -33,13 +36,13 @@ class ChatViewModel : ViewModel() {
     }
 
     fun getChats(uid: String, limit: Int = 20, chats: (List<ChatModel>) -> Unit) {
-        val chatModelList = mutableListOf<ChatModel>()
-        _firestrore.collection("chats").document(uid).collection("messages").limit(limit.toLong())
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+        _firestrore.collection("chats").document(uid).collection("messages")
+            .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     return@addSnapshotListener
                 } else {
+                    val chatModelList = mutableListOf<ChatModel>()
                     snapshot?.let { snap ->
                         for (document in snap) {
                             chatModelList.add(
@@ -74,7 +77,7 @@ class ChatViewModel : ViewModel() {
                             )
                         }
                     }
-                    chats(chatModelList.sortedBy { it.timestamp })
+                    chats(chatModelList.sortedByDescending { it.timestamp })
                 }
             }
     }

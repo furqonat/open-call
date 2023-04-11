@@ -2,6 +2,9 @@ package com.furqonr.opencall.ui.screens.chat
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +50,7 @@ fun Chat(
 
     val scope = rememberCoroutineScope()
 
-    val scrollState = rememberScrollState()
+    val scrollState = rememberLazyListState()
 
     val focusRequester = remember { FocusRequester() }
 
@@ -68,9 +71,8 @@ fun Chat(
                         sender = sender!!,
                         receiver = user!!
                     ) {
-                        setChats(chats + it)
                         scope.launch {
-                            scrollState.animateScrollTo(0)
+                            scrollState.animateScrollToItem(scrollState.firstVisibleItemScrollOffset)
                         }
                     }
 
@@ -78,31 +80,19 @@ fun Chat(
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .verticalScroll(
-                    state = scrollState,
-                    enabled = true,
-                    reverseScrolling = true,
-                    flingBehavior = null
-                )
-        ) {
-            chats.mapIndexed { index, chat ->
-                val lastChat = chats[chats.size - 1].sender.uid
-                val currentChat = chats[index].sender.uid
-                val nextChat = if (index + 1 < chats.size) chats[index + 1].sender.uid else lastChat
-                val isSame = currentChat == nextChat
 
-                val same = chat.sender.compare(currentUserUid)
-                Message(
-                    chatModel = chat,
-                    videModel = model,
-                    chatId = chatId,
-                    isCurrentUser = isSame,
-                )
-            }
-        }
+           LazyColumn(modifier = Modifier.padding(paddingValues), state = scrollState) {
+               items(chats) {
+                   Message(
+                       chatModel = it,
+                       videModel = model,
+                       chatId = chatId,
+                   )
+               }
+               item(1) {
+
+               }
+           }
     }
 
     SideEffect {

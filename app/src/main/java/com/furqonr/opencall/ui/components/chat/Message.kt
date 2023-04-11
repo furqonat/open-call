@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.furqonr.opencall.MainViewModel
 import com.furqonr.opencall.R
 import com.furqonr.opencall.models.ChatModel
 import com.furqonr.opencall.ui.screens.chat.ChatViewModel
@@ -28,19 +30,18 @@ fun Message(
     chatModel: ChatModel,
     videModel: ChatViewModel,
     chatId: String,
-    isCurrentUser: Boolean
 ) {
     val chatStatus = remember {
         mutableStateOf(false)
     }
-
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val width = min(screenWidth * 0.7f, 300f).dp
+    val isCurrentUser = videModel.currentUser?.uid == chatModel.sender.uid
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = if (!isCurrentUser) Arrangement.Start else Arrangement.End,
+            horizontalArrangement = if (isCurrentUser) Arrangement.Start else Arrangement.End,
         ) {
             Row(
                 verticalAlignment = Alignment.Bottom,
@@ -50,15 +51,15 @@ fun Message(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Column(
-                    horizontalAlignment = if (!isCurrentUser) Alignment.Start else Alignment.End,
+                    horizontalAlignment = if (isCurrentUser) Alignment.Start else Alignment.End,
                 ) {
                     Card(
                         modifier = Modifier.padding(8.dp),
                         shape = RoundedCornerShape(
                             topEnd = 8.dp,
                             topStart = 8.dp,
-                            bottomEnd = if (!isCurrentUser) 8.dp else 0.dp,
-                            bottomStart = if (!isCurrentUser) 0.dp else 8.dp
+                            bottomEnd = if (isCurrentUser) 8.dp else 0.dp,
+                            bottomStart = if (isCurrentUser) 0.dp else 8.dp
                         ),
                     ) {
                         Text(

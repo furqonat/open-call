@@ -1,5 +1,7 @@
 package com.furqonr.opencall.ui.screens.intro
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,57 +11,59 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.furqonr.opencall.ui.components.intro.SignInWithGoogleButton
-import com.furqonr.opencall.ui.theme.Green700
-import com.furqonr.opencall.ui.theme.Typography
+import com.furqonr.opencall.ui.theme.*
+import com.google.firebase.auth.AuthResult
+import compose.icons.AllIcons
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Brands
+import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.brands.Facebook
+import compose.icons.fontawesomeicons.regular.User
 
 @Composable
 fun SignIn(
     onSignInClick: (username: String?) -> Unit = {},
-    onGoogleClick: () -> Unit = {},
+    onGoogleClick: (AuthResult) -> Unit = {},
     disabled: Boolean = false
 ) {
-    val configuration = LocalConfiguration.current
-    val displayHeight = configuration.screenHeightDp
+    val isDarkTheme = isSystemInDarkTheme()
 
     val (username, setUsername) = remember { mutableStateOf("") }
-
-    ConstraintLayout {
-        val (topLayout, middleLayout) = createRefs()
-        Surface(
-            modifier = Modifier
-                .height(displayHeight.dp / 2)
-                .fillMaxWidth()
-                .constrainAs(topLayout) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            color = Green700,
-        ) {
-
-        }
+    val colorGradient = Brush.verticalGradient(
+        colors = if (isDarkTheme) listOf(Color.Black, Color.Black) else listOf(
+            Green700,
+            Green500,
+            Green200,
+            Lime200
+        )
+    )
+    Column(
+        modifier = Modifier
+            .background(brush = colorGradient)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Card(
             modifier = Modifier
-                .constrainAs(middleLayout) {
-                    top.linkTo(topLayout.bottom, margin = (-80).dp)
-                    start.linkTo(parent.start, margin = (-20).dp)
-                    end.linkTo(parent.end, margin = (-20).dp)
-                }
                 .padding(20.dp),
-            shape = RoundedCornerShape(20.dp)
+            shape = RoundedCornerShape(
+                topStart = 20.dp,
+                topEnd = 20.dp,
+                bottomStart = 20.dp,
+                bottomEnd = 0.dp
+            ),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 40.dp),
+                    .padding(vertical = 40.dp, horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -71,17 +75,25 @@ fun SignIn(
                     label = { Text(text = "Your name") },
                     placeholder = {
                         Text(text = "Please don't use a real name")
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = FontAwesomeIcons.Regular.User,
+                            contentDescription = "Person Icon",
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 )
 
                 Button(
-                    shape = RoundedCornerShape(20.dp),
                     enabled = !disabled && username.trim().isNotEmpty(),
                     onClick = {
                         if (username.isNotBlank()) {
                             onSignInClick(username)
                         }
-                    }) {
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     if (disabled) {
                         CircularProgressIndicator()
                     } else {
@@ -91,7 +103,8 @@ fun SignIn(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.Start)
+                        .align(Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Divider(
                         modifier = Modifier
@@ -140,7 +153,7 @@ fun SignIn(
                         )
                     }
                     SignInWithGoogleButton {
-                        onGoogleClick()
+                        onGoogleClick(it)
                     }
                 }
             }

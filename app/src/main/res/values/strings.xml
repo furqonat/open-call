@@ -6,6 +6,22 @@
 
     <string name="info">Did you know?</string>
     <string name="info_sub">This application is made by solo programmer and primarily made for learning proposes</string>
+    <string name="chat">Chats</string>
 
     <string name="google_web_client_id" translatable="false">1033127348229-psm0nda2v72dr4gj66bfdondhmmlq4ge.apps.googleusercontent.com</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="call">call</string>
+    <string name="online">Online</string>
+    <string name="insert_emoticon">Insert emoticon</string>
+    <string name="insert_message">Insert Message</string>
+    <string name="send_a_photo">send a photo</string>
+    <string name="send_message">send message</string>
 </resources>

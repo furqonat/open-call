@@ -3,8 +3,12 @@ package com.furqonr.opencall
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.graphics.Color
 import com.furqonr.opencall.ui.Navigation
 import com.furqonr.opencall.ui.theme.AppTheme
+import com.furqonr.opencall.ui.theme.Green700
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,7 +20,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppTheme {
+            val isDarkTheme = isSystemInDarkTheme()
+            val systemUiController = rememberSystemUiController()
+            systemUiController.setStatusBarColor(
+                color = if (isDarkTheme) Color.Black else Green700
+            )
+            AppTheme(useDarkTheme = isDarkTheme) {
                 Navigation()
             }
         }

@@ -12,6 +12,7 @@ import com.furqonr.opencall.ui.screens.chat.Chat
 import com.furqonr.opencall.ui.screens.intro.Detail
 import com.furqonr.opencall.ui.screens.intro.Intro
 import com.furqonr.opencall.ui.screens.intro.SignIn
+import com.furqonr.opencall.ui.screens.profile.Profile
 import com.furqonr.opencall.ui.utils.Introduction
 import com.furqonr.opencall.ui.utils.Screens
 
@@ -36,6 +37,9 @@ fun Navigation() {
             if (chatId != null) {
                 Chat(navController = navController, chatId = chatId)
             }
+        }
+        composable("profile") {
+            Profile()
         }
     }
 }
@@ -66,8 +70,14 @@ fun NavGraphBuilder.introduction(
                         }
                     }
                 }
-            }, onGoogleClick = {
-                navigation.navigate(Screens.MAIN_SCREEN.route)
+            }, onGoogleClick = { authResult ->
+                authResult.user?.let { it1 ->
+                    viewModel.signInWithGoogle(it1) {
+                        if (it != null) {
+                            navigation.navigate(Screens.MAIN_SCREEN.route)
+                        }
+                    }
+                }
             })
         }
 

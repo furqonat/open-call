@@ -20,6 +20,11 @@
         android:theme="@style/OpenCall"
         tools:targetApi="31">
         <activity
+            android:name=".ui.screens.chat.ChatActivity"
+            android:exported="false"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/OpenCall.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

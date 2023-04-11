@@ -2,6 +2,7 @@ package com.furqonr.opencall.ui.screens.intro
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -25,12 +26,13 @@ fun Detail(
 
     val configuration = LocalConfiguration.current
     val height = configuration.screenHeightDp.dp
+    val isDarkTheme = isSystemInDarkTheme()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Green700),
+            .background(if (isDarkTheme) Color.Black else Green700),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
