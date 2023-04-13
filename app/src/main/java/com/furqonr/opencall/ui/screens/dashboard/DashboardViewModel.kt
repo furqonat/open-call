@@ -90,12 +90,16 @@ class DashboardViewModel : ViewModel() {
 
     fun getConversation(currentUserUid: String, userUid: String, chatId: (String) -> Unit) {
         _firestore.collection("chats").get().addOnSuccessListener { result ->
-            for (document in result) {
-                val (first, second) = document.id.split("::")
-                if (first == currentUserUid && second == userUid || first == userUid && second == currentUserUid) {
-                    chatId(document.id)
-                } else {
-                    chatId("${currentUserUid}::${userUid}")
+            if (result.isEmpty) {
+                chatId("${currentUserUid}::${userUid}")
+            } else {
+                for (document in result) {
+                    val (sender, receiver) = document.id.split("::")
+                    if (sender == currentUserUid && receiver == userUid || sender == userUid && receiver == currentUserUid) {
+                        chatId(document.id)
+                    } else {
+                        chatId("${currentUserUid}::${userUid}")
+                    }
                 }
             }
         }

@@ -68,8 +68,8 @@ fun Chat(
                     model.sendMessage(
                         chatId = chatId,
                         message = message,
-                        sender = sender!!,
-                        receiver = user!!
+                        sender = sender!!.uid,
+                        receiver = user!!.uid
                     ) {
                         scope.launch {
                             scrollState.animateScrollToItem(scrollState.firstVisibleItemScrollOffset)

@@ -128,7 +128,6 @@ fun PublicUser(
 
     LaunchedEffect(currentUserUid) {
         if (currentUserUid.value.isNotEmpty() && chatId.value.isEmpty()) {
-            Log.e("TAG", "PublicUser: ${currentUserUid.value}")
             viewModel.getConversation(currentUserUid.value, user.uid) {
                 chatId.value = it
             }

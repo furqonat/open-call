@@ -1,5 +1,6 @@
 package com.furqonr.opencall.ui.screens.chat
 
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.furqonr.opencall.R
 import com.furqonr.opencall.models.ChatModel
+import com.furqonr.opencall.models.User
 import com.furqonr.opencall.ui.utils.DateConverter
 import com.google.firebase.auth.FirebaseUser
 
@@ -70,11 +72,20 @@ class ChatAdapter(
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentMessage = messages[position].sender.uid
-        if (currentMessage == currentUser.uid) {
+        val uid = messages[position].sender
+        println(uid == currentUser.uid)
+        if (uid == currentUser.uid) {
             holder.bindSender(messages[position], listener)
         } else {
             holder.bindReceiver(messages[position], listener)
         }
+
+
+//
+//        if (currentMessage == currentUser.uid) {
+//            holder.bindSender(messages[position], listener)
+//        } else {
+//            holder.bindReceiver(messages[position], listener)
+//        }
     }
 }

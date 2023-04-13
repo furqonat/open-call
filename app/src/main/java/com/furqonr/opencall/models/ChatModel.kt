@@ -2,14 +2,13 @@ package com.furqonr.opencall.models
 
 import com.google.gson.annotations.SerializedName
 
-
-class ChatModel(
+data class ChatModel(
     var uid: String,
     var message: String,
     var timestamp: Long,
     var type: String,
-    var sender: User,
-    var receiver: User,
+    var sender: String,
+    var receiver: String,
     @SerializedName("read")
     var isRead: Boolean = false,
     @SerializedName("sent")

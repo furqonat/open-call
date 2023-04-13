@@ -24,7 +24,6 @@ import com.furqonr.opencall.R
 import com.furqonr.opencall.models.User
 import com.furqonr.opencall.ui.components.dashboard.PublicUser
 import com.furqonr.opencall.ui.theme.Typography
-import java.util.*
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
@@ -39,12 +38,6 @@ fun Dashboard(
     val currentUser = remember {
         mutableStateOf(viewModel.currentUser.value)
     }
-//    val defaultAvatar = if (currentUser.value?.displayName?.isEmpty() == false) {
-//        currentUser.value?.displayName?.first().toString()
-//            .uppercase(Locale.getDefault())
-//    } else {
-//        ""
-//    }
     val defaultAvatar = ""
 
 
@@ -79,7 +72,6 @@ fun Dashboard(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         if (currentUser.value?.photoUrl != null) {
-//                            Image(painter =, contentDescription = "profile picture")
                             GlideImage(
                                 model = currentUser.value?.photoUrl,
                                 contentDescription = ""
@@ -98,7 +90,7 @@ fun Dashboard(
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues).padding(horizontal = 20.dp)
         ) {
             item(0) {
                 Text(text = "Public user", modifier = Modifier.padding(4.dp), style = Typography.h6)

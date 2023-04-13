@@ -36,7 +36,7 @@ fun Message(
     }
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val width = min(screenWidth * 0.7f, 300f).dp
-    val isCurrentUser = videModel.currentUser?.uid == chatModel.sender.uid
+    val isCurrentUser = videModel.currentUser?.uid == chatModel.sender
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(

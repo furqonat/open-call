@@ -48,7 +48,7 @@ class MainViewModel : ViewModel() {
 
     private fun createNewUser(user: FirebaseUser?, currentUser: (FirebaseUser?) -> Unit) {
         val account = hashMapOf(
-            "username" to user?.displayName,
+            "username" to if (user?.displayName == null) "Uonn User" else user.displayName,
             "uid" to user?.uid,
             "status" to "online",
             "allowStranger" to false,
@@ -58,7 +58,7 @@ class MainViewModel : ViewModel() {
             if (fUser.isSuccessful) {
                 val id = fUser.result.data?.get("uid")
                 if (id != null) {
-                    return@addOnCompleteListener
+                    currentUser(user)
                 } else {
                     user?.uid?.let { _firestore.collection("users").document(it).set(account) }
                         ?.addOnCompleteListener {

@@ -110,12 +110,11 @@ class ChatActivity : AppCompatActivity() {
             userInput.editText.addTextChangedListener(watcher)
             userInput.sendMessage.setOnClickListener { _ ->
                 currentUser?.let { user ->
-                    println(user)
                     viewModel.sendMessage(
                         message = message,
                         chatId = chatId,
-                        sender = user,
-                        receiver = it
+                        sender = user.uid,
+                        receiver = it.uid
                     ) { _ ->
                         binding.messageLayout.smoothScrollToPosition(0)
                     }

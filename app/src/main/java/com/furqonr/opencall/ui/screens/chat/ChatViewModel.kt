@@ -1,8 +1,6 @@
 package com.furqonr.opencall.ui.screens.chat
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.furqonr.opencall.models.ChatModel
 import com.furqonr.opencall.models.User
@@ -51,18 +49,8 @@ class ChatViewModel : ViewModel() {
                                     message = document["message"].toString(),
                                     timestamp = document["timestamp"].toString().toLong(),
                                     type = document["type"].toString(),
-                                    sender = User(
-                                        uid = document["sender"].toString(),
-                                        displayName = document["sender"].toString(),
-                                        status = document["sender"].toString(),
-                                        allowStranger = document["sender"].toString().toBoolean()
-                                    ),
-                                    receiver = User(
-                                        uid = document["receiver"].toString(),
-                                        displayName = document["receiver"].toString(),
-                                        status = document["receiver"].toString(),
-                                        allowStranger = document["receiver"].toString().toBoolean()
-                                    ),
+                                    sender = document["sender"].toString(),
+                                    receiver = document["receiver"].toString(),
                                     isRead = document["read"].toString().toBoolean(),
                                     isSent = document["sent"].toString().toBoolean(),
                                     isDeleted = mapOf(
@@ -85,8 +73,8 @@ class ChatViewModel : ViewModel() {
     fun sendMessage(
         message: String,
         chatId: String,
-        sender: User,
-        receiver: User,
+        sender: String,
+        receiver: String,
         chatResult: (ChatModel) -> Unit,
     ) {
         val chatModel =
@@ -102,8 +90,8 @@ class ChatViewModel : ViewModel() {
                 isDelivered = false,
                 isSeen = false,
                 isDeleted = hashMapOf(
-                    sender.uid to false,
-                    receiver.uid to false
+                    sender to false,
+                    receiver to false
                 )
             )
         chatResult(chatModel)
@@ -118,8 +106,8 @@ class ChatViewModel : ViewModel() {
                     _firestrore.collection("chats").document(chatId).set({
                         "lastMessage" to chatModel.message
                         "lastMessageTimestamp" to chatModel.timestamp
-                        "lastMessageSender" to chatModel.sender.uid
-                        "lastMessageReceiver" to chatModel.receiver.uid
+                        "lastMessageSender" to chatModel.sender
+                        "lastMessageReceiver" to chatModel.receiver
                     })
                 } else {
                     Log.d("ChatViewModel", "sendMessage: Failed")

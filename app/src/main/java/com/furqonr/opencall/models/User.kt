@@ -1,6 +1,6 @@
 package com.furqonr.opencall.models
 
-class User(
+data class User(
     val uid: String,
     val displayName: String,
     val status: String = "online",
