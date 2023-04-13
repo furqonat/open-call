@@ -63,4 +63,5 @@
     <color name="md_theme_dark_scrim">#000000</color>
     <color name="icon_color">#201F1F</color>
     <color name="surface_color">#FFFFFF</color>
+    <color name="surface_color_reverse">#388e3c</color>
 </resources>

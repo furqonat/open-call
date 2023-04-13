@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.furqonr.opencall.R
 import com.furqonr.opencall.models.ChatModel
@@ -41,12 +42,13 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bindReceiver(chat: ChatModel, listener: OnLongPressListener) {
         parentLayout.gravity = Gravity.START
         dateText.gravity = Gravity.START
+        cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.surface_color_reverse))
         bind(chat, listener)
     }
 
     private fun bind(chat: ChatModel, listener: OnLongPressListener) {
         message.text = chat.message
-        dateText.text = DateConverter(chat.timestamp.toString()).convert()
+        dateText.text = DateConverter(chat.timestamp.toString()).time(itemView.context)
         cardView.setOnLongClickListener {
             listener.chat(chat)
             return@setOnLongClickListener true
@@ -79,13 +81,5 @@ class ChatAdapter(
         } else {
             holder.bindReceiver(messages[position], listener)
         }
-
-
-//
-//        if (currentMessage == currentUser.uid) {
-//            holder.bindSender(messages[position], listener)
-//        } else {
-//            holder.bindReceiver(messages[position], listener)
-//        }
     }
 }

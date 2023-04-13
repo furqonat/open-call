@@ -108,6 +108,14 @@ dependencies {
     // glide
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
 
+    // emoji2
+    def emoji2_version = "1.4.0-beta01"
+
+    implementation "androidx.emoji2:emoji2:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-views:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-views-helper:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-emojipicker:$emoji2_version"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
